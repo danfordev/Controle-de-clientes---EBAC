@@ -1,47 +1,49 @@
-const clientes = document.getElementById("controleClientes");
-fetch("https://crudcrud.com/api/6150dc511c644513a088048a20f33d73")
+const clientes = document.getElementById("listaclientes");
+fetch("https://crudcrud.com/api/18aa0856b58f4ee38acc2b950eecb330/clientes")
 .then(resposta => resposta.json())
-.then((controleDeClientes) => (
+.then((listaDeClientes) => {
 
-    controleDeClientes.forEach(cliente => {
+    listaDeClientes.forEach(cliente => {
         const item = document.createElement("li");
-        item.innerHTML = `${cliente.descricao} <button onclick="remove(${cliente._id})">x</button>`;
+        item.innerHTML = `${cliente.descricao} ${cliente.email} <button id="removecliente('${cliente.id}')">Remover</button>`;
         clientes.appendChild(item);
         
     });
-));
+});
 
 document.getElementById("add").addEventListener("click", () => {
     const descricao = document.getElementById("nome").value;
-    const email = document.getElementById("email").value;
+    const elemento = document.getElementById("email").value;
 
-    const cliente = {descricao: descricao, email: email};
+    const cliente = {
+        descricao: descricao,
+        email: elemento
+    }
 
-
-    fetch("https://crudcrud.com/api/6150dc511c644513a088048a20f33d73",{
+    fetch("https://crudcrud.com/api/18aa0856b58f4ee38acc2b950eecb330/clientes",{
 
         method: "POST",
         headers: {
             "content-type": "application/json"
         },
-        body: JSON.stringify({descricao: descricao, email: email})
+        body: JSON.stringify({descricao: descricao, email: elemento})
 
     })
     .then(resposta => resposta.json())
     .then((cliente) => {
 
         const item = document.createElement("li");
-        item.innerHTML = `${cliente.descricao} <button onclick= remove('${cliente._id}')>x</button>`;
+        item.innerHTML = `${cliente.descricao} ${cliente.email} <button id="removecliente('${cliente.id}')">Remover</button>`;
         clientes.appendChild(item);
-    })
-}
-)
+    });
+});
 
-function remove (_id) {
-    fetch("https://crudcrud.com/api/6150dc511c644513a088048a20f33d73",{
+document.getElementById("removecliente").addEventListener("click", () => {
+    fetch("https://crudcrud.com/api/18aa0856b58f4ee38acc2b950eecb330/clientes/removecliente/removeelemento",{
         method: "DELETE",
         headers: {
             "content-type": "application/json"
         },
+    
     });
-}
+});
